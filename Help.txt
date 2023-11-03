@@ -1,0 +1,101 @@
+A summary of the algorithm is provided below. Before
+starting, the width of the probe, the depth setting and the
+side of needle insertion (left or right) is used to determine
+the maximum range of possible needle angles. This range
+limits the region of interest (ROI) to perform the search.
+The gauge of the needle is also assumed to be known.
+
+1. Choose a rough approximation of the needle’s axis
+line in the ultrasound image based on the expected
+trajectory and define a rectangular ROI.
+
+2. Cast a multitude of rays perpendicular to the approximate needle line within the ROI. These rays should
+cross the needle shaft at roughly right angles. The
+approximate needle axis, ROI, and perpendicular
+rays are shown in Fig. 1.
+
+3. For each pixel along each ray, calculate the average
+pixel intensity among that pixel and a line of neighboring pixels parallel to the approximate needle line.
+The neighborhood of pixels is shown in Fig. 2. This
+step filters out noise and any bright features that
+are not part of a line running roughly parallel to
+the approximate needle line.
+
+4. For each pixel along each ray, calculate the linear
+derivative along the ray of the averaged pixel intensities. We use the simplest approximation for the derivative using the following equation,
+d/dn * i[n] = i[n+1] - i[n]; 
+where i[n] is the averaged pixel intensity of the nth
+pixel along the ray.
+This is the edge-detection step. Sharp edges in the
+ultrasound image that are crossed by the rays will
+appear as peaks. The first side of the needle shaft
+crossed by the ray will produce a positive peak and
+the second side will produce a negative peak. Indeed,
+this approximation to the derivative results in a noisy
+derivative profile but subsequent steps have the effect
+of averaging this data.
+
+5. Traverse each ray looking at a window of derivative
+values along the ray, and search for a derivative profile across the window that matches that of the needle. The size of the window is a parameter which is
+set to approximately the width of the needle as it
+appears in the ultrasound image. Fig. 3 shows derivative values along a ray and the window positioned
+over a needle-like derivative profile. Moving along
+each ray in increments of one pixel, compute the
+value of score using the following equation,
+
+score = Slag - Slead - |Slag + Slead|; 
+
+where Slead is the sum of the derivative values in the
+leading half of the window and Slag is sum of the
+derivative values in the lagging half of the window,
+as shown in Fig. 3. The summing of derivative values
+within the window-halves filters the noise generated
+by the derivative performed in the previous step.
+When the window is centered on the needle shaft, Slag
+will be large and positive and Slead will be large and
+negative resulting in a large positive score. All other
+derivative profiles will result in a lower (more negative) score. The |Slag + Slead| term penalizes the score
+if Slag and Slead are not approximately equivalent in
+magnitude, i.e., if we have a sharp edge but not a
+finite width needle.
+For the window position that produced the highest
+score along each ray, record the position of the pixel
+at the window center. This is the best guess at where
+the needle shaft crosses each ray.
+
+6. Project all the points from the previous step along the
+approximate needle line and accumulate their score
+values in an array of bins that span the width of
+the ROI. The bin location with the highest accumulated score defines the strongest linear feature parallel
+to the approximate needle line of this iteration. Fig. 4
+shows the projection step and the score histogram.
+This is the line detection technique derived from the
+Hough transform.
+Because we are quantizing the needle point positions
+into bins, we smooth the accumulated bin scores by
+adding the current pixel’s score to the appropriate
+bin and half that score to each of its neighboring bins.
+This prevents a strong linear feature from beingmissed if it lies on the boundary between two bins
+causing its scores to be split between the two.
+
+7. Rotate the initial linear approximation of the needle by a small angular increment and repeat steps
+2–7 until the angular search range has been
+exhausted. Record the set of data points for the
+iteration that produced the largest accumulated
+bin score. The line parallel to the approximate needle line for that iteration that passes through the
+highest scoring bin position defines the best linear
+guess for the needle.
+
+8. Reject points whose distance from the best linear
+guess exceeds a threshold value. We want to include
+all the points that contributed to the largest peak in
+the bin scores and reject those points that form a part
+of other image features.
+
+9. Fit the remaining points to a polynomial equation
+using a polynomial least squares regression.
+
+10. Define the tip of the needle using the deepest detected
+point. Fig. 5 shows the best linear representation of
+the needle, the point rejection thresholds, and the final
+polynomial representation of the needle up to the tip.
