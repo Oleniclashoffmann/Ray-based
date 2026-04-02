@@ -32,10 +32,8 @@ Input Image → Preprocessing → RANSAC ROI Estimation → Ray Casting & Scorin
 
 | Technology | Purpose |
 |---|---|
-| **C++** | Core implementation language |
+| **C++17** | Core implementation language |
 | **OpenCV** | Image processing, connected components, line drawing, matrix operations |
-| **RANSAC** | Robust initial line estimation for ROI determination |
-| **Polynomial Least Squares** | Final needle axis fitting |
 
 ## Project Structure
 
