@@ -4,7 +4,7 @@
 
 ## Problem Statement
 
-During ultrasound-guided medical procedures (e.g. biopsies, regional anesthesia), accurate real-time localization of the needle tip and shaft is critical for patient safety. However, needles are often difficult to visualize in ultrasound due to noise, artifacts, and poor contrast — especially at steep insertion angles. This project implements a robust computer vision algorithm to automatically detect needle position and orientation in ultrasound image sequences.
+Accurate needle tip localization during ultrasound-guided medical procedures (e.g. biopsies, regional anesthesia) is critical for patient safety. However, needles are often poorly visible in ultrasound images due to noise, speckle artifacts, and tissue interference. Manual tracking by clinicians is error-prone and limits procedural efficiency. This project addresses the challenge by implementing a **fully automated, multi-stage image processing pipeline** that enhances needle visibility, detects the needle trajectory, and precisely estimates the tip position — all in real time.
 
 ## Algorithm Overview
 
