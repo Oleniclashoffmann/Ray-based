@@ -55,11 +55,6 @@ Statistical filtering/
 | `AxisEst` | Core detection — defines a rotated rectangular ROI, casts perpendicular rays, computes intensity derivatives, applies the scoring function, builds a Hough-like histogram, detects needle points and tip, and fits a polynomial curve |
 | `save_file` | Logs needle tip coordinates, estimated angle, and computation time to output files |
 
-## Prerequisites
-
-- **C++17** compatible compiler
-- **OpenCV 4.x** (tested with OpenCV 4.5+)
-- **Visual Studio 2019/2022** (`.vcxproj` included) or any C++ build system with OpenCV linked
 
 ## Getting Started
 
